@@ -1,3 +1,6 @@
+# This code shows the calculation of rotor losses in high speed PM machines
+# author: Jaime Renedo Anglada, CERN, TE MSC (jaime.renedo@cern.ch)
+
 
 # Define geometry:
 
@@ -66,11 +69,7 @@ println("R_4 = $R_4")
 println("R_5 = $R_5")
 println("r_wave = $r_wave")
 
-println("B_r_ext = $(B_r_ext*1000)")
-
-using SpecialFunctions
-
-P_3=Calc_rotor_loss( n_mech, space_order, p, k_time, B_r_ext,L,R_1,R_2,R_3,R_4,R_5,sigma_1,sigma_2,sigma_3,sigma_4,sigma_5,mu_r,r_wave)
+println("B_r_ext = $(B_r_ext*1000) in [mT]")
 
 
 
@@ -78,12 +77,13 @@ P_3=Calc_rotor_loss( n_mech, space_order, p, k_time, B_r_ext,L,R_1,R_2,R_3,R_4,R
 
 using SpecialFunctions
 
-vec_Br=[6.073 9.436 2.553 1.42 2.744 4.267 1.155]*10.0^-3;
-vec_so=[5 7 9 11 11 13 15];
-vec_time=[1 1 1 1 2 2 2];
+vec_Br=[6.073 9.436 2.553 1.42 2.744 4.267 1.155]*10.0^-3; # vector with the amplitude of the asynchronous harmonics
+vec_so=[5 7 9 11 11 13 15]; # vector with the space orders of the asynchronous harmonics
+vec_time=[1 1 1 1 2 2 2]; # vector with the time orders of the asynchronous harmonics
 
+
+# Loop to calculate the power loss of each harmonic
 vec_loss=zeros(1,length(vec_Br));
-
 for count=1:length(vec_Br)
     space_order=vec_so[count]
     B_r_ext=vec_Br[count]
@@ -96,21 +96,18 @@ end
 
 count=1;
 
-#P_3=Calc_rotor_loss( n_mech, space_order, p, k_time, B_r_ext,L,R_1,R_2,R_3,R_4,R_5,sigma_1,sigma_2,sigma_3,sigma_4,sigma_5,mu_r,r_wave)
-
-
+# Print no load losses:
 println("$vec_loss")
 
-# no load losses
+# on load losses
 
-using SpecialFunctions
+vec_Br=[7.84 4.8598 1.8727 1.1626]*10.0^-3; # vector with the amplitude of the asynchronous harmonics
+vec_so=[5 7 11 13]; # vector with the space orders of the asynchronous harmonics
+vec_time=[1 1 1 1 2 2 2]; # vector with the time orders of the asynchronous harmonics
 
-vec_Br=[7.84 4.8598 1.8727 1.1626]*10.0^-3;
-vec_so=[5 7 11 13];
-vec_time=[1 1 1 1 2 2 2];
 
+# Loop to calculate the power loss of each harmonic
 vec_loss=zeros(1,length(vec_Br));
-
 for count=1:length(vec_Br)
     space_order=vec_so[count]
     B_r_ext=vec_Br[count]
@@ -123,7 +120,7 @@ end
 
 count=1;
 
-#P_3=Calc_rotor_loss( n_mech, space_order, p, k_time, B_r_ext,L,R_1,R_2,R_3,R_4,R_5,sigma_1,sigma_2,sigma_3,sigma_4,sigma_5,mu_r,r_wave)
 
-
+# Print on load losses: 
 println("$vec_loss")
+
